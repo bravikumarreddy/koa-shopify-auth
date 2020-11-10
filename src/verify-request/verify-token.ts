@@ -1,18 +1,18 @@
-import {Context} from 'koa';
-import {Method, Header, StatusCode} from '@shopify/network';
+import { Context } from 'koa';
+import { Method, Header, StatusCode } from '@shopify/network';
 
-import {NextFunction} from '../types';
-import {TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME} from '../index';
+import { NextFunction } from '../types';
+import { TEST_COOKIE_NAME, TOP_LEVEL_OAUTH_COOKIE_NAME } from '../index';
 
-import {Routes} from './types';
-import {redirectToAuth} from './utilities';
+import { Routes } from './types';
+import { redirectToAuth } from './utilities';
 
 export function verifyToken(routes: Routes) {
   return async function verifyTokenMiddleware(
     ctx: Context,
     next: NextFunction,
   ) {
-    const {session} = ctx;
+    const { session } = ctx;
 
     if (session && session.accessToken) {
       ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME);
@@ -21,7 +21,7 @@ export function verifyToken(routes: Routes) {
       const response = await fetch(
         `https://${session.shop}/admin/metafields.json`,
         {
-          method: Method.Post,
+          method: Method.Get,
           headers: {
             [Header.ContentType]: 'application/json',
             'X-Shopify-Access-Token': session.accessToken,
